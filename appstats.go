@@ -35,7 +35,7 @@ import (
 var (
   // RecordFraction is the fraction of requests to record.
   // Set to a number between 0.0 (none) and 1.0 (all).
-  RecordFraction float64 = 1.0
+  RecordFraction float64 = 0.01
 
   // ShouldRecord is the function used to determine if recording will occur
   // for a given request. The default is to use RecordFraction.

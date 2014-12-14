@@ -30,7 +30,7 @@ const htmlBase = `
   <style>
     @import "static/appstats_css.css";
   </style>
-  <title>Appstats - {{.Env.APPLICATION_ID}}</title>
+  <title>Secret App Stats</title>
 {{ end }}
 
 {{ define "body" }}
@@ -40,16 +40,12 @@ const htmlBase = `
     {{/* Header begin */}}
     <div id="hd" class="g-section">
       <div class="g-section">
-        <a href="."><img id="ae-logo" src="static/app_engine_logo_sm.gif"
-          width="176" height="30" alt="Google App Engine" border="0"></a>
+        <h1><a href=".">Secret</a></h1>
       </div>
       <div id="ae-appbar-lrg" class="g-section">
         <div class="g-section g-tpl-50-50 g-split">
           <div class="g-unit g-first">
             <h1>Application Stats for {{.Env.APPLICATION_ID}}</h1>
-          </div>
-          <div class="g-unit">
-            All costs displayed in micropennies (1 dollar equals 100 pennies, 1 penny equals 1 million micropennies)
           </div>
         </div>
       </div>

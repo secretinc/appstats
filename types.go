@@ -35,15 +35,21 @@ const (
 )
 
 type RequestStats struct {
-  User        string
-  Admin       bool
-  Method      string
-  Path, Query string
-  Status      int
-  Cost        int64
-  Start       time.Time
-  Duration    time.Duration
-  RPCStats    []RPCStat
+  Id            string
+  AppId         string
+  ModuleName    string
+  ModuleVersion string
+  UserId        string
+  User          string
+  Admin         bool
+  Method        string
+  Path, Query   string
+  Status        int
+  Cost          int64
+  Start         time.Time
+  Duration      time.Duration
+  RPCStats      []RPCStat
+  Level         string
 
   lock sync.Mutex
   wg   sync.WaitGroup
@@ -153,6 +159,7 @@ type StatByName struct {
   RecentReqs   []int
   RequestStats *RequestStats
   Duration     time.Duration
+  Level        string
 }
 
 type reverse struct{ sort.Interface }

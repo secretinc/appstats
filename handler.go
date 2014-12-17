@@ -117,8 +117,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
     idx := i + 1
     requestById[idx] = v
     idByRequest[v] = idx
+    level := ""
+    if v.Duration > time.Duration(1)*time.Second {
+      level = "critical"
+    } else if v.Duration > time.Duration(100)*time.Millisecond {
+      level = "warning"
+    }
     requests[idx] = &StatByName{
       RequestStats: v,
+      Level:        level,
     }
     byRequest[idx] = make(map[string]cVal)
   }

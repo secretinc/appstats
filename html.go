@@ -218,7 +218,11 @@ const htmlMain = `
     {{ range $index, $r := .Requests }}
     <tbody>
       <tr>
-        <td colspan="4" class="ae-hanging-indent">
+        <td colspan="4" class="ae-hanging-indent"
+          {{if eq $r.Level "warning"}}style="background-color: #ffdb99;"
+          {{else if eq $r.Level "critical"}}style="background-color: #ff6666;"
+          {{end}}
+        >
           <span class="goog-inline-block ae-zippy ae-zippy-expand" id="ae-path-requests-{{$index}}"></span>
           ({{$index}})
           <a name="req-{{$index}}" href="details?time={{$r.RequestStats.Start.Nanosecond}}" class="ae-stats-request-link">
@@ -228,11 +232,6 @@ const htmlMain = `
             {{if $r.RequestStats.Status}}{{$r.RequestStats.Status}}{{end}}
           </a>
           real={{$r.RequestStats.Duration}}
-          {{/*
-          overhead={{$r.overhead_walltime_milliseconds}}ms
-          ({{$r.combined_rpc_count}} RPC{{$r.combined_rpc_count}},
-            billed_ops=[{{$r.combined_rpc_billed_ops}}])
-          */}}
           ({{$r.RequestStats.RPCStats | len}} RPCs,
             cost={{$r.RequestStats.Cost}})
         </td>
@@ -299,11 +298,14 @@ const htmlDetails = `
         {{.Record.User}}{{ if .Record.Admin }}*{{ end }}
         real={{.Record.Duration}}
         cost={{.Record.Cost}}
-        {{/*
-        overhead={{.Record.overhead_walltime_milliseconds}}ms
         <br>
-        billed_ops={{.Record.combined_rpc_billed_ops}}
-        */}}
+        rid={{.Record.Id}}
+        {{if .Record.AppId}}
+          <a href="https://console.developers.google.com/project/{{.Record.AppId}}/logs?service=appengine.googleapis.com&expandAll=false&versionId={{.Record.ModuleVersion}}&logName=appengine.googleapis.com%2Frequest_log&moduleId={{.Record.ModuleName}}&filters=regex:rid%3D{{.Record.Id}}">(logs)</a>
+        {{if .Record.UserId}}
+          uid={{.Record.UserId}}
+        {{end}}
+        {{end}}
       </dd>
     </dl>
   </div>

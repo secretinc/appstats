@@ -24,6 +24,7 @@ import (
   "net/http"
   "net/url"
   "runtime/debug"
+  "strings"
   "time"
 
   "appengine"
@@ -124,12 +125,17 @@ func NewContext(req *http.Request) Context {
     req:     req,
     ae:      c,
     Stats: &RequestStats{
-      User:   uname,
-      Admin:  admin,
-      Method: req.Method,
-      Path:   req.URL.Path,
-      Query:  req.URL.RawQuery,
-      Start:  time.Now(),
+      Id:            appengine.RequestID(c),
+      AppId:         appengine.AppID(c),
+      ModuleVersion: strings.Split(appengine.VersionID(c), ".")[0],
+      ModuleName:    appengine.ModuleName(c),
+      UserId:        req.Header.Get("X-User-Id"),
+      User:          uname,
+      Admin:         admin,
+      Method:        req.Method,
+      Path:          req.URL.Path,
+      Query:         req.URL.RawQuery,
+      Start:         time.Now(),
     },
   }
 }
@@ -140,13 +146,17 @@ func TaskContext(ctx appengine.Context, task string) Context {
     req:     nil,
     ae:      ctx,
     Stats: &RequestStats{
-      User:   "worker",
-      Admin:  true,
-      Method: "POST",
-      Path:   "/_ah/queue/go/delay/",
-      Query:  fmt.Sprintf("task=%s", task),
-      Start:  time.Now(),
-      Status: 200,
+      Id:            appengine.RequestID(ctx),
+      AppId:         appengine.AppID(ctx),
+      ModuleVersion: strings.Split(appengine.VersionID(ctx), ".")[0],
+      ModuleName:    appengine.ModuleName(ctx),
+      User:          "admin",
+      Admin:         true,
+      Method:        "POST",
+      Path:          "/_ah/deferred/task",
+      Query:         fmt.Sprintf("task=%s", task),
+      Start:         time.Now(),
+      Status:        200,
     },
   }
 }
